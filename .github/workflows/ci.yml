@@ -1,0 +1,46 @@
+name: Test and package
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.9"
+          enable-cache: true
+      - name: Install locked development environment
+        run: uv sync --locked
+      - name: Lint, type check, and test
+        run: uv run --frozen python scripts/check.py
+      - name: Acceptance scenario
+        run: uv run --frozen navigation-lab --headless --report artifacts/acceptance.json
+      - name: Build native package
+        run: uv run --frozen python scripts/build.py
+      - name: Smoke test packaged executable (Linux)
+        if: runner.os == 'Linux'
+        run: ./dist/NavigationLab/NavigationLab --headless
+      - name: Smoke test packaged executable (Windows)
+        if: runner.os == 'Windows'
+        run: ./dist/NavigationLab/NavigationLab.exe --headless
+      - name: Smoke test packaged GUI (Linux)
+        if: runner.os == 'Linux'
+        run: ./dist/NavigationLab/NavigationLab --frames 5 --screenshot artifacts/packaged.png
+        env:
+          SDL_VIDEODRIVER: dummy
+      - name: Smoke test packaged GUI (Windows)
+        if: runner.os == 'Windows'
+        run: ./dist/NavigationLab/NavigationLab.exe --frames 5 --screenshot artifacts/packaged.png
+        env:
+          SDL_VIDEODRIVER: dummy
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NavigationLab-${{ runner.os }}
+          path: |
+            dist/NavigationLab/
+            artifacts/

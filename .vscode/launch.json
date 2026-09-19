@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Navigation Lab: GUI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "navigation_lab",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Navigation Lab: headless",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "navigation_lab",
+      "args": ["--headless", "--report", "artifacts/debug-report.json"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

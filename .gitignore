@@ -1,0 +1,42 @@
+# Per-machine Python environments
+.venv/
+venv/
+.tox/
+.nox/
+
+# Python bytecode, tool caches, and coverage
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Generated builds, package metadata, and local verification output
+build/
+dist/
+artifacts/
+*.egg-info/
+*.log
+logs/
+
+# Local secrets; sanitized configuration examples can be committed
+.env
+.env.*
+!.env.example
+!.env.*.example
+!.env.sample
+secrets/
+
+# Personal editor and OS state (shared .vscode configs are versioned)
+.idea/
+*.code-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
